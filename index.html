@@ -6,489 +6,128 @@
 <title>ProfitZone - Online Tasks</title>
 
 <style>
-*{
- box-sizing:border-box;
- margin:0;
- padding:0;
- font-family:Arial,sans-serif;
-}
-body{
- background:#080808;
- color:white;
-}
-header{
- background:#151515;
- padding:20px;
- border-bottom:2px solid gold;
- display:flex;
- justify-content:space-between;
- align-items:center;
-}
-.logo{
- color:gold;
- font-size:25px;
- font-weight:bold;
-}
-.container{
- max-width:1000px;
- margin:auto;
- padding:20px;
-}
-.card{
- background:#171717;
- border:1px solid gold;
- border-radius:12px;
- padding:22px;
- margin:20px 0;
-}
-h1,h2{
- color:gold;
- margin-bottom:18px;
-}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}
+body{background:#080808;color:white}
+header{background:#151515;padding:20px;border-bottom:2px solid gold;display:flex;justify-content:space-between}
+.logo{color:gold;font-size:25px;font-weight:bold}
+.container{max-width:1000px;margin:auto;padding:20px}
+.card{background:#171717;border:1px solid gold;border-radius:12px;padding:22px;margin:20px 0}
+h1,h2{color:gold;margin-bottom:18px}
 p{line-height:1.6}
-input,select{
- width:100%;
- padding:14px;
- margin:9px 0;
- background:#222;
- border:1px solid gold;
- border-radius:8px;
- color:white;
- font-size:16px;
-}
-button{
- background:linear-gradient(45deg,#d99c00,#ffe66d);
- border:0;
- padding:13px 20px;
- border-radius:8px;
- font-weight:bold;
- cursor:pointer;
- margin:6px 3px;
-}
-button:disabled{
- opacity:.5;
-}
-.stats{
- display:grid;
- grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
- gap:12px;
-}
-.stat{
- background:#252525;
- padding:20px;
- text-align:center;
- border-radius:10px;
-}
-.stat strong{
- display:block;
- color:gold;
- font-size:27px;
- margin-bottom:8px;
-}
+input{width:100%;padding:14px;margin:9px 0;background:#222;border:1px solid gold;border-radius:8px;color:white;font-size:16px}
+button{background:linear-gradient(45deg,#d99c00,#ffe66d);border:0;padding:13px 20px;border-radius:8px;font-weight:bold;cursor:pointer;margin:6px 3px}
 #dashboard{display:none}
 #message{color:#ff7777;margin-top:10px}
 .small{color:#aaa;font-size:13px}
-.task{
- background:#252525;
- padding:18px;
- border-radius:10px;
- margin:12px 0;
-}
-footer{
- text-align:center;
- padding:25px;
- color:#aaa;
- border-top:1px solid #444;
-}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}
+.stat{background:#252525;padding:20px;text-align:center;border-radius:10px}
+.stat strong{display:block;color:gold;font-size:27px}
+.task{background:#252525;padding:18px;border-radius:10px;margin:12px 0}
+footer{text-align:center;padding:25px;color:#aaa}
 </style>
 </head>
 
 <body>
 
 <header>
- <div class="logo">👑 ProfitZone</div>
- <div>ONLINE TASKS</div>
+<div class="logo">👑 ProfitZone</div>
+<div>ONLINE TASKS</div>
 </header>
 
 <div class="container">
 
-<!-- HOME -->
-
 <div id="home">
 
- <div class="card">
-  <h1>Welcome to ProfitZone 👑</h1>
-  <p>Complete demo activities and collect demo points.</p>
- </div>
-
- <div class="card">
-  <h2>Create Account</h2>
-
-  <input id="signupName" placeholder="Full Name">
-  <input id="signupEmail" type="email" placeholder="Email Address">
-  <input id="signupPassword" type="password" placeholder="Create Password">
-
-  <button onclick="signup()">SIGN UP</button>
- </div>
-
- <div class="card">
-  <h2>User Login</h2>
-
-  <input id="loginEmail" type="email" placeholder="Email Address">
-  <input id="loginPassword" type="password" placeholder="Password">
-
-  <button onclick="login()">LOGIN</button>
-
-  <p id="message"></p>
- </div>
-
+<div class="card">
+<h1>Welcome to ProfitZone 👑</h1>
+<p>Create your account and access your dashboard.</p>
 </div>
 
+<div class="card">
+<h2>Create Account</h2>
+<input id="signupName" placeholder="Full Name">
+<input id="signupEmail" type="email" placeholder="Email Address">
+<input id="signupPassword" type="password" placeholder="Create Password">
+<button onclick="signup()">SIGN UP</button>
+</div>
 
-<!-- USER DASHBOARD -->
+<div class="card">
+<h2>User Login</h2>
+<input id="loginEmail" type="email" placeholder="Email Address">
+<input id="loginPassword" type="password" placeholder="Password">
+<button onclick="login()">LOGIN</button>
+<p id="message"></p>
+</div>
+
+</div>
 
 <div id="dashboard">
 
- <div class="card">
-  <h1>Welcome, <span id="userName"></span> 👑</h1>
-  <p>Your ProfitZone Dashboard</p>
- </div>
-
- <div class="stats">
-
-  <div class="stat">
-   <strong id="balance">0</strong>
-   Demo Points
-  </div>
-
-  <div class="stat">
-   <strong id="completed">0</strong>
-   Completed Tasks
-  </div>
-
- </div>
-
-
- <!-- TASKS -->
-
- <div class="card">
-
-  <h2>🎯 Available Tasks</h2>
-
-  <div class="task">
-   <h3>Daily Reward</h3>
-   <p>Collect 10 demo points.</p>
-   <button id="dailyBtn" onclick="completeTask('daily',10)">
-    CLAIM REWARD
-   </button>
-  </div>
-
-  <div class="task">
-   <h3>Reading Task</h3>
-   <p>Read the activity instructions and collect 5 demo points.</p>
-   <button onclick="completeTask('reading',5)">
-    COMPLETE TASK
-   </button>
-  </div>
-
-  <div class="task">
-   <h3>Copy Task</h3>
-   <p>Copy this demo text and collect 5 demo points.</p>
-   <p id="copyText">Welcome to ProfitZone Demo!</p>
-   <button onclick="copyTask()">COPY TEXT</button>
-  </div>
-
- </div>
-
-
- <!-- WITHDRAWAL -->
-
- <div class="card">
-
-  <h2>💰 Withdrawal Request</h2>
-
-  <p class="small">
-   Demo only. This form does not send real money.
-  </p>
-
-  <input id="withdrawAmount" type="number"
-   min="1" placeholder="Enter Demo Points">
-
-  <select id="withdrawMethod">
-   <option value="">Select Method</option>
-   <option>JazzCash</option>
-   <option>Easypaisa</option>
-   <option>Bank Transfer</option>
-  </select>
-
-  <input id="withdrawAccount"
-   placeholder="Demo Account Details">
-
-  <button onclick="withdraw()">SUBMIT DEMO REQUEST</button>
-
-  <p id="withdrawMessage"></p>
-
- </div>
-
- <div class="card">
-  <h2>Account Information</h2>
-  <p id="accountEmail"></p>
-  <p id="accountStatus"></p>
-  <button onclick="logout()">LOGOUT</button>
- </div>
-
+<div class="card">
+<h1>Welcome, <span id="userName"></span> 👑</h1>
+<p>Your ProfitZone Dashboard</p>
 </div>
 
+<div class="stats">
+<div class="stat">
+<strong id="balance">0</strong>
+Demo Points
+</div>
+</div>
+
+<div class="card">
+<h2>🎯 Available Tasks</h2>
+
+<div class="task">
+<h3>Daily Reward</h3>
+<p>Collect demo points.</p>
+<p class="small">Task rewards will be enabled after secure points setup.</p>
+</div>
+
+<div class="task">
+<h3>Reading Task</h3>
+<p>Complete a reading activity.</p>
+</div>
+
+<div class="task">
+<h3>Copy Task</h3>
+<p>Welcome to ProfitZone Demo!</p>
+</div>
+</div>
+
+<div class="card">
+<h2>Account Information</h2>
+<p id="accountEmail"></p>
+<p id="accountStatus">Status: Active</p>
+<button onclick="logout()">LOGOUT</button>
+</div>
+
+</div>
 </div>
 
 <footer>
- <p>© 2026 ProfitZone</p>
- <p>Demo Platform - No Real Payments</p>
+<p>© 2026 ProfitZone</p>
+<p>Demo Platform - No Real Payments</p>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
-const USERS_KEY="pz_users";
-const WITHDRAW_KEY="pz_withdrawals";
-const SESSION_KEY="pz_current_user";
+const SUPABASE_URL = "https://fefrnivoeiaejkrrggqt.supabase.co";
 
-function getUsers(){
- try{
-  return JSON.parse(localStorage.getItem(USERS_KEY)||"[]");
- }catch(e){
-  return [];
- }
+const SUPABASE_KEY = "YOUR_SUPABASE_PUBLISHABLE_KEY";
+
+const db = window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
+function showMessage(text){
+document.getElementById("message").innerText=text;
 }
 
-function saveUsers(users){
- localStorage.setItem(USERS_KEY,JSON.stringify(users));
-}
+async function signup(){
 
-function getWithdrawals(){
- try{
-  return JSON.parse(localStorage.getItem(WITHDRAW_KEY)||"[]");
- }catch(e){
-  return [];
- }
-}
-
-function saveWithdrawals(items){
- localStorage.setItem(WITHDRAW_KEY,JSON.stringify(items));
-}
-
-function currentUser(){
- let email=localStorage.getItem(SESSION_KEY);
- if(!email)return null;
-
- return getUsers().find(u=>u.email===email)||null;
-}
-
-function signup(){
-
- let name=document.getElementById("signupName").value.trim();
- let email=document.getElementById("signupEmail").value.trim().toLowerCase();
- let password=document.getElementById("signupPassword").value;
-
- let message=document.getElementById("message");
-
- if(!name||!email||!password){
-  message.innerText="Please fill all fields.";
-  return;
- }
-
- if(password.length<6){
-  message.innerText="Password must be at least 6 characters.";
-  return;
- }
-
- let users=getUsers();
-
- if(users.some(u=>u.email===email)){
-  message.innerText="This email is already registered.";
-  return;
- }
-
- users.push({
-  name:name,
-  email:email,
-  password:password,
-  points:0,
-  completed:[],
-  blocked:false
- });
-
- saveUsers(users);
-
- message.innerText="Account created! Now login.";
- document.getElementById("signupPassword").value="";
-}
-
-function login(){
-
- let email=document.getElementById("loginEmail").value.trim().toLowerCase();
- let password=document.getElementById("loginPassword").value;
-
- let user=getUsers().find(u=>
-  u.email===email && u.password===password
- );
-
- if(!user){
-  document.getElementById("message").innerText="Invalid email or password.";
-  return;
- }
-
- if(user.blocked){
-  document.getElementById("message").innerText="Your demo account is blocked.";
-  return;
- }
-
- localStorage.setItem(SESSION_KEY,email);
- showDashboard();
-}
-
-function showDashboard(){
-
- let user=currentUser();
-
- if(!user){
-  document.getElementById("home").style.display="block";
-  document.getElementById("dashboard").style.display="none";
-  return;
- }
-
- if(user.blocked){
-  logout();
-  alert("Your demo account is blocked.");
-  return;
- }
-
- document.getElementById("home").style.display="none";
- document.getElementById("dashboard").style.display="block";
-
- document.getElementById("userName").innerText=user.name;
- document.getElementById("balance").innerText=Number(user.points)||0;
- document.getElementById("completed").innerText=user.completed.length;
- document.getElementById("accountEmail").innerText="Email: "+user.email;
- document.getElementById("accountStatus").innerText="Status: Active";
-
- let today=new Date().toISOString().slice(0,10);
-
- document.getElementById("dailyBtn").disabled=
- user.completed.includes("daily-"+today);
-}
-
-function completeTask(task,points){
-
- let user=currentUser();
- if(!user)return;
-
- let users=getUsers();
- let index=users.findIndex(u=>u.email===user.email);
-
- if(index===-1)return;
-
- let taskId=task;
-
- if(task==="daily"){
-  taskId="daily-"+new Date().toISOString().slice(0,10);
- }
-
- if(users[index].completed.includes(taskId)){
-  alert("You have already completed this demo task.");
-  return;
- }
-
- users[index].points=(Number(users[index].points)||0)+points;
- users[index].completed.push(taskId);
-
- saveUsers(users);
- showDashboard();
-
- alert(points+" demo points added!");
-}
-
-function copyTask(){
-
- let text=document.getElementById("copyText").innerText;
-
- if(!navigator.clipboard){
-  alert("Copy is not supported in this browser.");
-  return;
- }
-
- navigator.clipboard.writeText(text).then(()=>{
-  completeTask("copy",5);
- }).catch(()=>{
-  alert("Could not copy text.");
- });
-}
-
-function withdraw(){
-
- let user=currentUser();
- if(!user)return;
-
- let amount=Number(document.getElementById("withdrawAmount").value);
- let method=document.getElementById("withdrawMethod").value;
- let account=document.getElementById("withdrawAccount").value.trim();
-
- let message=document.getElementById("withdrawMessage");
-
- if(!Number.isInteger(amount)||amount<=0||!method||!account){
-  message.innerText="Please enter valid demo request details.";
-  return;
- }
-
- let users=getUsers();
- let index=users.findIndex(u=>u.email===user.email);
-
- if(index===-1)return;
-
- if(amount>Number(users[index].points||0)){
-  message.innerText="Not enough demo points.";
-  return;
- }
-
- let requests=getWithdrawals();
-
- requests.push({
-  email:user.email,
-  amount:amount,
-  method:method,
-  account:account,
-  status:"Pending",
-  date:new Date().toISOString()
- });
-
- saveWithdrawals(requests);
-
- message.innerText="Demo request saved successfully.";
- document.getElementById("withdrawAmount").value="";
- document.getElementById("withdrawAccount").value="";
-}
-
-function logout(){
- localStorage.removeItem(SESSION_KEY);
- document.getElementById("dashboard").style.display="none";
- document.getElementById("home").style.display="block";
-}
-
-function escapeHTML(value){
- return String(value).replace(/[&<>"']/g,c=>({
-  "&":"&amp;",
-  "<":"&lt;",
-  ">":"&gt;",
-  '"':"&quot;",
-  "'":"&#39;"
- }[c]));
-}
-
-if(currentUser()){
- showDashboard();
-}
-
-</script>
-
-</body>
-</html>
+const name=document.getElementById("signupName").value.trim();
+const email=document.getElementById
