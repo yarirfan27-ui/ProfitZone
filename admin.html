@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ProfitZone Admin</title>
+
 <style>
 *{box-sizing:border-box}
 body{
@@ -20,7 +21,7 @@ header{
 }
 header h1{color:#d4af37;margin:0}
 .container{
- max-width:900px;
+ max-width:1000px;
  margin:25px auto;
  padding:15px;
 }
@@ -28,14 +29,14 @@ header h1{color:#d4af37;margin:0}
  background:#171717;
  padding:20px;
  margin-bottom:20px;
- border:1px solid #444;
+ border:1px solid #d4af37;
  border-radius:12px;
 }
 h2{color:#d4af37}
 input,button{
  width:100%;
- padding:13px;
- margin:8px 0;
+ padding:12px;
+ margin:7px 0;
  border-radius:7px;
  border:1px solid #555;
 }
@@ -48,6 +49,8 @@ button{
  border:none;
 }
 button:hover{background:#f2d46b}
+.danger{background:#c0392b;color:white}
+.green{background:#218c50;color:white}
 .stat{
  display:inline-block;
  background:#252525;
@@ -65,17 +68,24 @@ table{
  width:100%;
  border-collapse:collapse;
  margin-top:15px;
+ min-width:650px;
 }
 th,td{
- padding:12px;
+ padding:10px;
  border:1px solid #444;
  text-align:left;
 }
 th{color:#d4af37}
+td button{
+ padding:8px;
+ font-size:12px;
+}
 #dashboard{display:none}
 .small{color:#aaa;font-size:13px}
+.status{color:#d4af37}
 </style>
 </head>
+
 <body>
 
 <header>
@@ -86,36 +96,42 @@ th{color:#d4af37}
 <div class="container">
 
 <div class="card" id="loginBox">
-<h2>Admin Login</h2>
+<h2>👑 Admin Login</h2>
+
 <input id="email" type="email" placeholder="Admin Email">
-<input id="password" type="password" placeholder="Password">
+<input id="password" type="password" placeholder="Admin Password">
+
 <button onclick="login()">LOGIN</button>
 <p id="error" style="color:red"></p>
-<p class="small">Demo admin panel. Login details are visible in this public code.</p>
 </div>
 
 <div id="dashboard">
 
 <div class="card">
-<h2>Dashboard</h2>
+<h2>📊 Dashboard</h2>
+
 <div class="stat">
 <strong id="totalUsers">0</strong>
-Users
+Total Users
 </div>
+
 <div class="stat">
-<strong id="totalTasks">3</strong>
-Demo Tasks
+<strong id="totalPoints">0</strong>
+Total Demo Points
 </div>
+
 <div class="stat">
-<strong>Demo</strong>
-Payments
+<strong id="totalWithdrawals">0</strong>
+Withdrawal Requests
 </div>
-<button onclick="loadData()">REFRESH DATA</button>
-<button onclick="logout()">LOGOUT</button>
+
+<button onclick="loadData()">🔄 REFRESH DATA</button>
+<button onclick="logout()" class="danger">LOGOUT</button>
 </div>
 
 <div class="card">
-<h2>Registered Users</h2>
+<h2>👥 Registered Users</h2>
+
 <div style="overflow-x:auto">
 <table>
 <thead>
@@ -123,35 +139,93 @@ Payments
 <th>Name</th>
 <th>Email</th>
 <th>Points</th>
+<th>Status</th>
+<th>Actions</th>
 </tr>
 </thead>
-<tbody id="userTable">
-<tr><td colspan="3">No users found.</td></tr>
-</tbody>
+<tbody id="userTable"></tbody>
 </table>
 </div>
 </div>
 
 <div class="card">
-<h2>Admin Notice</h2>
-<p>This is a frontend demo panel. It only reads demo data saved in this browser's localStorage.</p>
-<p>It does not process real withdrawals, payments, or user accounts from other devices.</p>
+<h2>💰 Manage User Points</h2>
+
+<input id="pointEmail" placeholder="User Email">
+<input id="pointAmount" type="number" min="1" placeholder="Enter Points">
+
+<button onclick="changePoints(1)">➕ Add Points</button>
+<button onclick="changePoints(-1)" class="danger">➖ Remove Points</button>
+<p id="pointMessage"></p>
+</div>
+
+<div class="card">
+<h2>💳 Withdrawal Requests</h2>
+
+<div style="overflow-x:auto">
+<table>
+<thead>
+<tr>
+<th>User</th>
+<th>Amount</th>
+<th>Method</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody id="withdrawTable"></tbody>
+</table>
+</div>
+</div>
+
+<div class="card">
+<h2>📋 User Details</h2>
+<input id="detailEmail" placeholder="Enter User Email">
+<button onclick="showDetails()">VIEW DETAILS</button>
+<div id="details"></div>
+</div>
+
+<div class="card">
+<h2>⚠️ Admin Notice</h2>
+<p>This is a demo admin panel.</p>
+<p>It uses browser localStorage. It does not process real payments or securely manage accounts across devices.</p>
 </div>
 
 </div>
 </div>
 
 <script>
+
+function getUsers(){
+ try{
+  return JSON.parse(localStorage.getItem("pz_users")||"[]");
+ }catch(e){return [];}
+}
+
+function saveUsers(users){
+ localStorage.setItem("pz_users",JSON.stringify(users));
+}
+
+function getWithdrawals(){
+ try{
+  return JSON.parse(localStorage.getItem("pz_withdrawals")||"[]");
+ }catch(e){return [];}
+}
+
+function saveWithdrawals(items){
+ localStorage.setItem("pz_withdrawals",JSON.stringify(items));
+}
+
 function login(){
- const email=document.getElementById("email").value;
- const password=document.getElementById("password").value;
+ let email=document.getElementById("email").value;
+ let password=document.getElementById("password").value;
 
  if(email==="admin@profitzone.demo" &&
-    password==="PZAdmin2026"){
-   sessionStorage.setItem("pz_admin_login","yes");
-   showDashboard();
+ password==="PZAdmin2026"){
+  sessionStorage.setItem("pz_admin_login","yes");
+  showDashboard();
  }else{
-   document.getElementById("error").innerText="Wrong email or password!";
+  document.getElementById("error").innerText="Wrong Email or Password!";
  }
 }
 
@@ -162,27 +236,140 @@ function showDashboard(){
 }
 
 function loadData(){
- let users=[];
- try{
-   users=JSON.parse(localStorage.getItem("pz_users")||"[]");
- }catch(e){users=[];}
+
+ let users=getUsers();
+ let withdrawals=getWithdrawals();
+
+ let points=users.reduce((sum,u)=>sum+(Number(u.points)||0),0);
 
  document.getElementById("totalUsers").innerText=users.length;
+ document.getElementById("totalPoints").innerText=points;
+ document.getElementById("totalWithdrawals").innerText=withdrawals.length;
 
- const table=document.getElementById("userTable");
+ let table=document.getElementById("userTable");
 
  if(users.length===0){
-   table.innerHTML='<tr><td colspan="3">No users found in this browser.</td></tr>';
-   return;
+  table.innerHTML='<tr><td colspan="5">No users found.</td></tr>';
+ }else{
+  table.innerHTML=users.map((u,i)=>`
+   <tr>
+    <td>${escapeHTML(u.name||"Unknown")}</td>
+    <td>${escapeHTML(u.email||"")}</td>
+    <td>${Number(u.points)||0}</td>
+    <td>${u.blocked?"Blocked":"Active"}</td>
+    <td>
+     <button onclick="toggleBlock(${i})"
+      class="${u.blocked?"green":"danger"}">
+      ${u.blocked?"UNBLOCK":"BLOCK"}
+     </button>
+    </td>
+   </tr>
+  `).join("");
  }
 
- table.innerHTML=users.map(user=>`
- <tr>
- <td>${escapeHTML(user.name||"Unknown")}</td>
- <td>${escapeHTML(user.email||"")}</td>
- <td>${Number(user.points)||0}</td>
- </tr>
+ renderWithdrawals();
+}
+
+function toggleBlock(index){
+ let users=getUsers();
+
+ if(!users[index])return;
+
+ users[index].blocked=!users[index].blocked;
+ saveUsers(users);
+ loadData();
+
+ alert(users[index].blocked?"User blocked in demo data":"User unblocked in demo data");
+}
+
+function changePoints(amountType){
+
+ let email=document.getElementById("pointEmail").value.trim().toLowerCase();
+ let amount=Number(document.getElementById("pointAmount").value);
+ let message=document.getElementById("pointMessage");
+
+ if(!email||!Number.isInteger(amount)||amount<=0){
+  message.innerText="Enter a valid email and points amount.";
+  return;
+ }
+
+ let users=getUsers();
+ let index=users.findIndex(u=>(u.email||"").toLowerCase()===email);
+
+ if(index===-1){
+  message.innerText="User not found.";
+  return;
+ }
+
+ let current=Number(users[index].points)||0;
+
+ if(amountType===-1 && current<amount){
+  message.innerText="User does not have enough points.";
+  return;
+ }
+
+ users[index].points=current+(amount*amountType);
+ saveUsers(users);
+
+ message.innerText="Demo points updated successfully.";
+ loadData();
+}
+
+function showDetails(){
+
+ let email=document.getElementById("detailEmail").value.trim().toLowerCase();
+ let users=getUsers();
+
+ let user=users.find(u=>(u.email||"").toLowerCase()===email);
+ let box=document.getElementById("details");
+
+ if(!user){
+  box.innerHTML="User not found.";
+  return;
+ }
+
+ box.innerHTML=`
+  <h3 style="color:#d4af37">User Information</h3>
+  <p>Name: ${escapeHTML(user.name||"Unknown")}</p>
+  <p>Email: ${escapeHTML(user.email||"")}</p>
+  <p>Points: ${Number(user.points)||0}</p>
+  <p>Status: ${user.blocked?"Blocked":"Active"}</p>
+ `;
+}
+
+function renderWithdrawals(){
+
+ let items=getWithdrawals();
+ let table=document.getElementById("withdrawTable");
+
+ if(items.length===0){
+  table.innerHTML='<tr><td colspan="5">No withdrawal requests found in this browser.</td></tr>';
+  return;
+ }
+
+ table.innerHTML=items.map((w,i)=>`
+  <tr>
+   <td>${escapeHTML(w.email||w.user||"Unknown")}</td>
+   <td>${escapeHTML(w.amount||"N/A")}</td>
+   <td>${escapeHTML(w.method||"N/A")}</td>
+   <td class="status">${escapeHTML(w.status||"Pending")}</td>
+   <td>
+    <button onclick="setWithdrawalStatus(${i},'Approved')" class="green">APPROVE DEMO</button>
+    <button onclick="setWithdrawalStatus(${i},'Rejected')" class="danger">REJECT DEMO</button>
+   </td>
+  </tr>
  `).join("");
+}
+
+function setWithdrawalStatus(index,status){
+
+ let items=getWithdrawals();
+ if(!items[index])return;
+
+ items[index].status=status;
+ saveWithdrawals(items);
+ loadData();
+ alert("Demo status updated: "+status);
 }
 
 function escapeHTML(value){
@@ -205,7 +392,7 @@ function logout(){
 if(sessionStorage.getItem("pz_admin_login")==="yes"){
  showDashboard();
 }
-</script>
 
+</script>
 </body>
 </html>
