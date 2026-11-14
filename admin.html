@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ProfitZone Admin</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#090909;
+ color:white;
+}
+header{
+ background:#171717;
+ padding:20px;
+ text-align:center;
+ border-bottom:2px solid #d4af37;
+}
+header h1{color:#d4af37;margin:0}
+.container{
+ max-width:900px;
+ margin:25px auto;
+ padding:15px;
+}
+.card{
+ background:#171717;
+ padding:20px;
+ margin-bottom:20px;
+ border:1px solid #444;
+ border-radius:12px;
+}
+h2{color:#d4af37}
+input,button{
+ width:100%;
+ padding:13px;
+ margin:8px 0;
+ border-radius:7px;
+ border:1px solid #555;
+}
+input{background:#222;color:white}
+button{
+ background:#d4af37;
+ color:black;
+ font-weight:bold;
+ cursor:pointer;
+ border:none;
+}
+button:hover{background:#f2d46b}
+.stat{
+ display:inline-block;
+ background:#252525;
+ padding:18px;
+ margin:5px;
+ border-radius:8px;
+ min-width:130px;
+}
+.stat strong{
+ display:block;
+ color:#d4af37;
+ font-size:24px;
+}
+table{
+ width:100%;
+ border-collapse:collapse;
+ margin-top:15px;
+}
+th,td{
+ padding:12px;
+ border:1px solid #444;
+ text-align:left;
+}
+th{color:#d4af37}
+#dashboard{display:none}
+.small{color:#aaa;font-size:13px}
+</style>
+</head>
+<body>
+
+<header>
+<h1>👑 ProfitZone Admin</h1>
+<p>Admin Control Panel</p>
+</header>
+
+<div class="container">
+
+<div class="card" id="loginBox">
+<h2>Admin Login</h2>
+<input id="email" type="email" placeholder="Admin Email">
+<input id="password" type="password" placeholder="Password">
+<button onclick="login()">LOGIN</button>
+<p id="error" style="color:red"></p>
+<p class="small">Demo admin panel. Login details are visible in this public code.</p>
+</div>
+
+<div id="dashboard">
+
+<div class="card">
+<h2>Dashboard</h2>
+<div class="stat">
+<strong id="totalUsers">0</strong>
+Users
+</div>
+<div class="stat">
+<strong id="totalTasks">3</strong>
+Demo Tasks
+</div>
+<div class="stat">
+<strong>Demo</strong>
+Payments
+</div>
+<button onclick="loadData()">REFRESH DATA</button>
+<button onclick="logout()">LOGOUT</button>
+</div>
+
+<div class="card">
+<h2>Registered Users</h2>
+<div style="overflow-x:auto">
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Email</th>
+<th>Points</th>
+</tr>
+</thead>
+<tbody id="userTable">
+<tr><td colspan="3">No users found.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="card">
+<h2>Admin Notice</h2>
+<p>This is a frontend demo panel. It only reads demo data saved in this browser's localStorage.</p>
+<p>It does not process real withdrawals, payments, or user accounts from other devices.</p>
+</div>
+
+</div>
+</div>
+
+<script>
+function login(){
+ const email=document.getElementById("email").value;
+ const password=document.getElementById("password").value;
+
+ if(email==="admin@profitzone.demo" &&
+    password==="PZAdmin2026"){
+   sessionStorage.setItem("pz_admin_login","yes");
+   showDashboard();
+ }else{
+   document.getElementById("error").innerText="Wrong email or password!";
+ }
+}
+
+function showDashboard(){
+ document.getElementById("loginBox").style.display="none";
+ document.getElementById("dashboard").style.display="block";
+ loadData();
+}
+
+function loadData(){
+ let users=[];
+ try{
+   users=JSON.parse(localStorage.getItem("pz_users")||"[]");
+ }catch(e){users=[];}
+
+ document.getElementById("totalUsers").innerText=users.length;
+
+ const table=document.getElementById("userTable");
+
+ if(users.length===0){
+   table.innerHTML='<tr><td colspan="3">No users found in this browser.</td></tr>';
+   return;
+ }
+
+ table.innerHTML=users.map(user=>`
+ <tr>
+ <td>${escapeHTML(user.name||"Unknown")}</td>
+ <td>${escapeHTML(user.email||"")}</td>
+ <td>${Number(user.points)||0}</td>
+ </tr>
+ `).join("");
+}
+
+function escapeHTML(value){
+ return String(value).replace(/[&<>"']/g,function(c){
+  return {
+   "&":"&amp;",
+   "<":"&lt;",
+   ">":"&gt;",
+   '"':"&quot;",
+   "'":"&#39;"
+  }[c];
+ });
+}
+
+function logout(){
+ sessionStorage.removeItem("pz_admin_login");
+ location.reload();
+}
+
+if(sessionStorage.getItem("pz_admin_login")==="yes"){
+ showDashboard();
+}
+</script>
+
+</body>
+</html>
