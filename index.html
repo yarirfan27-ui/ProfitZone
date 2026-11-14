@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ProfitZone - Online Earning</title>
+
+<style>
+*{
+ margin:0;
+ padding:0;
+ box-sizing:border-box;
+ font-family:Arial,sans-serif;
+}
+body{
+ background:#080808;
+ color:white;
+}
+header{
+ background:#111;
+ padding:18px;
+ border-bottom:2px solid #d6a500;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ flex-wrap:wrap;
+}
+.logo{
+ font-size:27px;
+ font-weight:bold;
+ color:gold;
+}
+nav a{
+ color:white;
+ text-decoration:none;
+ margin:10px;
+}
+button{
+ background:linear-gradient(45deg,#d99c00,#ffe66d);
+ color:black;
+ border:none;
+ padding:12px 22px;
+ border-radius:8px;
+ font-weight:bold;
+ cursor:pointer;
+}
+.hero{
+ text-align:center;
+ padding:75px 15px;
+ background:radial-gradient(circle,#332500,#080808 70%);
+}
+.hero h1{
+ font-size:48px;
+ color:gold;
+ margin-bottom:15px;
+}
+.hero p{
+ font-size:18px;
+ margin-bottom:25px;
+ line-height:1.6;
+}
+.container{
+ max-width:1100px;
+ margin:auto;
+ padding:25px;
+}
+.section-title{
+ color:gold;
+ text-align:center;
+ margin:30px 0;
+ font-size:28px;
+}
+.cards{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+ gap:18px;
+}
+.card{
+ background:#151515;
+ border:1px solid #bd9200;
+ border-radius:12px;
+ padding:25px;
+ text-align:center;
+}
+.card h2{
+ color:gold;
+ margin-bottom:15px;
+}
+.card p{
+ color:#ddd;
+ line-height:1.5;
+ margin-bottom:15px;
+}
+.dashboard{
+ display:none;
+}
+.box{
+ background:#151515;
+ padding:25px;
+ margin:15px 0;
+ border:1px solid gold;
+ border-radius:12px;
+}
+input,select{
+ width:100%;
+ padding:13px;
+ margin:10px 0;
+ background:#222;
+ color:white;
+ border:1px solid #aa8500;
+ border-radius:7px;
+}
+footer{
+ background:#111;
+ border-top:1px solid gold;
+ text-align:center;
+ padding:25px;
+ margin-top:40px;
+ color:#ccc;
+}
+.small{
+ color:#aaa;
+ font-size:13px;
+ margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+ <div class="logo">👑 ProfitZone</div>
+ <nav>
+  <a href="#home">Home</a>
+  <a href="#tasks">Tasks</a>
+  <a href="#about">About</a>
+ </nav>
+ <button onclick="showLogin()">Login / Signup</button>
+</header>
+
+<section class="hero" id="home">
+ <h1>PROFITZONE</h1>
+ <p>WORK ONLINE. EARN MONEY. BUILD YOUR FUTURE.</p>
+ <p>Complete simple demo tasks and collect reward points.</p>
+ <button onclick="showLogin()">START NOW →</button>
+</section>
+
+<div class="container">
+
+<section id="features">
+ <h2 class="section-title">Our Features</h2>
+ <div class="cards">
+
+  <div class="card">
+   <h2>📋 Tasks</h2>
+   <p>Complete simple tasks.</p>
+  </div>
+
+  <div class="card">
+   <h2>🎁 Rewards</h2>
+   <p>Collect demo reward points.</p>
+  </div>
+
+  <div class="card">
+   <h2>💰 Balance</h2>
+   <p>Check your reward point balance.</p>
+  </div>
+
+ </div>
+</section>
+
+<section id="auth" style="display:none">
+ <h2 class="section-title">Account</h2>
+ <div class="box">
+  <input id="username" placeholder="Enter your name">
+  <input id="email" type="email" placeholder="Enter email">
+  <input id="password" type="password" placeholder="Create password">
+  <button onclick="signup()">Create Account</button>
+  <button onclick="login()">Login</button>
+  <p id="authMessage"></p>
+  <p class="small">Demo account data is stored only in this browser.</p>
+ </div>
+</section>
+
+<section class="dashboard" id="dashboard">
+ <h2 class="section-title">My Dashboard</h2>
+
+ <div class="box">
+  <h2>Welcome, <span id="userDisplay"></span> 👑</h2>
+  <h3>Reward Points: <span id="balance">0</span></h3>
+  <p class="small">These are demo points, not cash or withdrawable money.</p>
+ </div>
+
+ <h2 class="section-title">Available Tasks</h2>
+
+ <div class="cards">
+
+  <div class="card">
+   <h2>📋 Copy Task</h2>
+   <p>Copy this text:</p>
+   <p id="copyText">Welcome to ProfitZone!</p>
+   <button onclick="copyTask()">Copy & Complete</button>
+  </div>
+
+  <div class="card">
+   <h2>📝 Reading Task</h2>
+   <p>Read the ProfitZone welcome message.</p>
+   <button onclick="completeTask('reading')">Complete Task</button>
+  </div>
+
+  <div class="card">
+   <h2>🎁 Daily Reward</h2>
+   <p>Collect your demo daily points.</p>
+   <button onclick="dailyReward()">Collect Reward</button>
+  </div>
+
+ </div>
+
+ <div class="box">
+  <h2>Withdrawal Information</h2>
+  <p>Real withdrawals are not enabled in this demo.</p>
+  <p>JazzCash / Easypaisa integration requires a verified payment system and funded rewards.</p>
+ </div>
+
+ <button onclick="logout()">Logout</button>
+</section>
+
+<section id="about">
+ <h2 class="section-title">About ProfitZone</h2>
+ <div class="card">
+  <p>ProfitZone is an online task and rewards platform demo.</p>
+  <p>Our goal is to provide a simple user-friendly experience.</p>
+ </div>
+</section>
+
+</div>
+
+<footer>
+ <h2 style="color:gold">👑 ProfitZone</h2>
+ <p>Work Online. Build Your Future.</p>
+ <p>© 2026 ProfitZone. All Rights Reserved.</p>
+</footer>
+
+<script>
+
+let currentUser = localStorage.getItem("pzUser");
+
+function showLogin(){
+ document.getElementById("auth").style.display="block";
+ document.getElementById("auth").scrollIntoView();
+}
+
+function signup(){
+
+ let name=document.getElementById("username").value.trim();
+ let email=document.getElementById("email").value.trim();
+ let password=document.getElementById("password").value;
+
+ if(!name || !email || !password){
+  alert("Please fill all fields!");
+  return;
+ }
+
+ if(localStorage.getItem("pz_"+email)){
+  alert("Account already exists. Please login.");
+  return;
+ }
+
+ let user={
+  name:name,
+  email:email,
+  password:password,
+  balance:0,
+  completed:[],
+  lastReward:""
+ };
+
+ localStorage.setItem("pz_"+email,JSON.stringify(user));
+ localStorage.setItem("pzUser",email);
+
+ currentUser=email;
+ showDashboard();
+
+}
+
+function login(){
+
+ let email=document.getElementById("email").value.trim();
+ let password=document.getElementById("password").value;
+
+ let data=localStorage.getItem("pz_"+email);
+
+ if(!data){
+  alert("Account not found!");
+  return;
+ }
+
+ let user=JSON.parse(data);
+
+ if(user.password!==password){
+  alert("Incorrect password!");
+  return;
+ }
+
+ localStorage.setItem("pzUser",email);
+ currentUser=email;
+
+ showDashboard();
+
+}
+
+function getUser(){
+ return JSON.parse(localStorage.getItem("pz_"+currentUser));
+}
+
+function saveUser(user){
+ localStorage.setItem("pz_"+currentUser,JSON.stringify(user));
+}
+
+function showDashboard(){
+
+ if(!currentUser)return;
+
+ let user=getUser();
+
+ if(!user)return;
+
+ document.getElementById("auth").style.display="none";
+ document.getElementById("dashboard").style.display="block";
+ document.getElementById("userDisplay").innerText=user.name;
+ document.getElementById("balance").innerText=user.balance;
+
+ document.getElementById("dashboard").scrollIntoView();
+
+}
+
+function copyTask(){
+
+ let user=getUser();
+
+ if(user.completed.includes("copy")){
+  alert("You already completed this task!");
+  return;
+ }
+
+ let text="Welcome to ProfitZone!";
+
+ navigator.clipboard.writeText(text).then(()=>{
+
+  user.balance+=10;
+  user.completed.push("copy");
+
+  saveUser(user);
+  showDashboard();
+
+  alert("Task completed! 10 demo points added.");
+
+ }).catch(()=>{
+  alert("Clipboard permission required.");
+ });
+
+}
+
+function completeTask(task){
+
+ let user=getUser();
+
+ if(user.completed.includes(task)){
+  alert("Already completed!");
+  return;
+ }
+
+ user.balance+=10;
+ user.completed.push(task);
+
+ saveUser(user);
+ showDashboard();
+
+ alert("10 demo points added!");
+
+}
+
+function dailyReward(){
+
+ let user=getUser();
+ let today=new Date().toDateString();
+
+ if(user.lastReward===today){
+  alert("You already collected today's reward!");
+  return;
+ }
+
+ user.balance+=20;
+ user.lastReward=today;
+
+ saveUser(user);
+ showDashboard();
+
+ alert("20 demo points collected!");
+
+}
+
+function logout(){
+
+ localStorage.removeItem("pzUser");
+ currentUser=null;
+
+ document.getElementById("dashboard").style.display="none";
+ document.getElementById("auth").style.display="none";
+
+ window.scrollTo(0,0);
+
+}
+
+if(currentUser){
+ showDashboard();
+}
+
+</script>
+
+</body>
+</html>
