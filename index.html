@@ -2,81 +2,130 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ProfitZone Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ProfitZone Admin Panel</title>
 
 <style>
-*{box-sizing:border-box}
-body{
+*{
+ box-sizing:border-box;
  margin:0;
- background:#080808;
- color:white;
+ padding:0;
  font-family:Arial,sans-serif;
 }
+
+body{
+ background:#080808;
+ color:white;
+}
+
 header{
  background:#151515;
- padding:20px;
+ padding:22px;
  border-bottom:2px solid gold;
  display:flex;
  justify-content:space-between;
  align-items:center;
 }
-.logo{color:gold;font-size:25px;font-weight:bold}
-button{
- background:linear-gradient(45deg,#d99c00,#ffe66d);
- border:0;
- padding:12px 20px;
- border-radius:8px;
+
+.logo{
+ color:gold;
+ font-size:27px;
  font-weight:bold;
- cursor:pointer;
- margin:5px;
 }
+
+.container{
+ max-width:1100px;
+ margin:auto;
+ padding:25px;
+}
+
+h1,h2{
+ color:gold;
+ margin-bottom:20px;
+}
+
+.card{
+ background:#171717;
+ border:1px solid gold;
+ border-radius:12px;
+ padding:25px;
+ margin:20px 0;
+}
+
 input{
  width:100%;
- padding:14px;
+ padding:15px;
  margin:10px 0;
  background:#222;
  border:1px solid gold;
  border-radius:8px;
  color:white;
+ font-size:16px;
 }
-.container{max-width:1100px;margin:auto;padding:20px}
-h2{color:gold}
-.card{
- background:#171717;
- border:1px solid gold;
- border-radius:12px;
- padding:20px;
- margin:15px 0;
+
+button{
+ background:linear-gradient(45deg,#d99c00,#ffe66d);
+ border:0;
+ padding:13px 22px;
+ border-radius:8px;
+ font-weight:bold;
+ cursor:pointer;
+ margin:5px;
 }
+
 .stats{
  display:grid;
  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
  gap:15px;
 }
+
 .stat{
  background:#171717;
  border:1px solid gold;
- padding:20px;
- border-radius:12px;
+ padding:25px;
  text-align:center;
+ border-radius:12px;
 }
-.stat h2{font-size:30px}
-#adminPanel{display:none}
-#loginBox{max-width:450px;margin:60px auto}
+
+.stat h2{
+ font-size:30px;
+}
+
+#adminPanel{
+ display:none;
+}
+
+#message{
+ color:#ff7777;
+ margin-top:15px;
+}
+
+.table-wrap{
+ overflow-x:auto;
+}
+
 table{
  width:100%;
  border-collapse:collapse;
- margin-top:15px;
+ min-width:450px;
 }
-th,td{
- padding:12px;
- border:1px solid #8c7000;
+
+td,th{
+ border:1px solid #997700;
+ padding:13px;
  text-align:left;
 }
-th{background:#332700;color:gold}
-.table-wrap{overflow-x:auto}
-small{color:#bbb}
+
+th{
+ color:gold;
+ background:#332700;
+}
+
+small{
+ color:#aaa;
+}
+
 </style>
 </head>
 
@@ -89,112 +138,148 @@ small{color:#bbb}
 
 <div class="container">
 
+<!-- ADMIN LOGIN -->
+
 <div id="loginBox" class="card">
- <h2>👑 Admin Login</h2>
 
- <input id="adminEmail" placeholder="Admin Email">
+<h1>👑 Admin Login</h1>
 
- <input id="adminPassword" type="password"
+<input
+ id="adminEmail"
+ type="email"
+ placeholder="Admin Email">
+
+<input
+ id="adminPassword"
+ type="password"
  placeholder="Admin Password">
 
- <button onclick="adminLogin()">Login</button>
+<button onclick="adminLogin()">LOGIN</button>
 
- <p id="message"></p>
+<p id="message"></p>
 
- <small>Demo credentials: admin@profitzone.demo</small>
- <br>
- <small>Password: DemoAdmin123!</small>
 </div>
+
+
+<!-- ADMIN DASHBOARD -->
 
 <div id="adminPanel">
 
- <h1 style="color:gold">Welcome Admin 👑</h1>
+<h1>Welcome Admin 👑</h1>
 
- <div class="stats">
+<div class="stats">
 
-  <div class="stat">
-   <h2 id="totalUsers">0</h2>
-   <p>Total Users</p>
-  </div>
-
-  <div class="stat">
-   <h2 id="totalPoints">0</h2>
-   <p>Total Demo Points</p>
-  </div>
-
-  <div class="stat">
-   <h2 id="totalTasks">0</h2>
-   <p>Completed Tasks</p>
-  </div>
-
+ <div class="stat">
+  <h2 id="totalUsers">0</h2>
+  <p>Total Users</p>
  </div>
 
- <div class="card">
-  <h2>👥 Registered Users</h2>
-
-  <div class="table-wrap">
-   <table>
-    <thead>
-     <tr>
-      <th>Name</th>
-      <th>Email</th>
-      <th>Points</th>
-      <th>Tasks</th>
-     </tr>
-    </thead>
-
-    <tbody id="userTable"></tbody>
-   </table>
-  </div>
-
-  <button onclick="loadUsers()">Refresh Users</button>
+ <div class="stat">
+  <h2 id="totalPoints">0</h2>
+  <p>Total Demo Points</p>
  </div>
 
- <div class="card">
-  <h2>📊 Website Information</h2>
-  <p>Platform: ProfitZone</p>
-  <p>Website: Online Earning Demo</p>
-  <p>Status: Active</p>
-  <p>Payment System: Not Connected</p>
+ <div class="stat">
+  <h2 id="totalTasks">0</h2>
+  <p>Completed Tasks</p>
  </div>
-
- <button onclick="adminLogout()">Logout</button>
 
 </div>
+
+
+<div class="card">
+
+<h2>👥 Registered Users</h2>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+<tr>
+<th>Name</th>
+<th>Email</th>
+<th>Points</th>
+<th>Tasks</th>
+</tr>
+</thead>
+
+<tbody id="userTable"></tbody>
+
+</table>
+
 </div>
+
+<button onclick="loadUsers()">Refresh Users</button>
+
+</div>
+
+
+<div class="card">
+
+<h2>📊 Website Information</h2>
+
+<p>Website: ProfitZone</p>
+<br>
+<p>Platform: Online Tasks Demo</p>
+<br>
+<p>Status: Active</p>
+<br>
+<p>Payment System: Not Connected</p>
+
+</div>
+
+<button onclick="adminLogout()">LOGOUT</button>
+
+</div>
+
+</div>
+
 
 <script>
 
+// ADMIN LOGIN
+
 function adminLogin(){
 
- let email=document.getElementById("adminEmail").value;
- let password=document.getElementById("adminPassword").value;
+ let email=document
+ .getElementById("adminEmail")
+ .value.trim().toLowerCase();
+
+ let password=document
+ .getElementById("adminPassword")
+ .value.trim();
 
  if(
  email==="admin@profitzone.demo" &&
- password==="DemoAdmin123!"
+ password==="PZAdmin2026"
  ){
 
-  document.getElementById("loginBox").style.display="none";
+  document.getElementById("loginBox")
+  .style.display="none";
 
-  document.getElementById("adminPanel").style.display="block";
+  document.getElementById("adminPanel")
+  .style.display="block";
 
   loadUsers();
 
  }else{
 
-  document.getElementById("message").innerText=
-  "Invalid Admin Login!";
+  document.getElementById("message")
+  .innerText="Invalid Email or Password!";
 
  }
 
 }
 
+
+// LOAD USERS
+
 function loadUsers(){
 
  let users=[];
- let totalPoints=0;
- let totalTasks=0;
+ let points=0;
+ let tasks=0;
 
  for(let i=0;i<localStorage.length;i++){
 
@@ -210,47 +295,55 @@ function loadUsers(){
 
      users.push(user);
 
-     totalPoints+=Number(user.balance)||0;
+     points+=Number(user.balance)||0;
 
-     totalTasks+=(user.completed||[]).length;
+     tasks+=(user.completed||[]).length;
 
     }
 
-   }catch(e){}
+   }catch(error){}
 
   }
 
  }
 
- document.getElementById("totalUsers").innerText=users.length;
+ document.getElementById("totalUsers")
+ .innerText=users.length;
 
- document.getElementById("totalPoints").innerText=totalPoints;
+ document.getElementById("totalPoints")
+ .innerText=points;
 
- document.getElementById("totalTasks").innerText=totalTasks;
+ document.getElementById("totalTasks")
+ .innerText=tasks;
 
  let html="";
 
  users.forEach(user=>{
 
   html+=`
-   <tr>
-    <td>${escapeHTML(user.name)}</td>
-    <td>${escapeHTML(user.email)}</td>
-    <td>${Number(user.balance)||0}</td>
-    <td>${(user.completed||[]).length}</td>
-   </tr>
+  <tr>
+   <td>${escapeHTML(user.name)}</td>
+   <td>${escapeHTML(user.email)}</td>
+   <td>${Number(user.balance)||0}</td>
+   <td>${(user.completed||[]).length}</td>
+  </tr>
   `;
 
  });
 
- document.getElementById("userTable").innerHTML=
- html || "<tr><td colspan='4'>No users found</td></tr>";
+ document.getElementById("userTable")
+ .innerHTML=html ||
+ "<tr><td colspan='4'>No users found</td></tr>";
 
 }
+
+
+// PROTECT TABLE OUTPUT
 
 function escapeHTML(value){
 
  return String(value).replace(/[&<>"']/g,function(c){
+
   return {
    "&":"&amp;",
    "<":"&lt;",
@@ -258,14 +351,24 @@ function escapeHTML(value){
    '"':"&quot;",
    "'":"&#39;"
   }[c];
+
  });
 
 }
 
+
+// LOGOUT
+
 function adminLogout(){
 
- document.getElementById("adminPanel").style.display="none";
- document.getElementById("loginBox").style.display="block";
+ document.getElementById("adminPanel")
+ .style.display="none";
+
+ document.getElementById("loginBox")
+ .style.display="block";
+
+ document.getElementById("adminPassword")
+ .value="";
 
 }
 
