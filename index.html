@@ -6,128 +6,435 @@
 <title>ProfitZone - Online Tasks</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}
-body{background:#080808;color:white}
-header{background:#151515;padding:20px;border-bottom:2px solid gold;display:flex;justify-content:space-between}
-.logo{color:gold;font-size:25px;font-weight:bold}
-.container{max-width:1000px;margin:auto;padding:20px}
-.card{background:#171717;border:1px solid gold;border-radius:12px;padding:22px;margin:20px 0}
-h1,h2{color:gold;margin-bottom:18px}
-p{line-height:1.6}
-input{width:100%;padding:14px;margin:9px 0;background:#222;border:1px solid gold;border-radius:8px;color:white;font-size:16px}
-button{background:linear-gradient(45deg,#d99c00,#ffe66d);border:0;padding:13px 20px;border-radius:8px;font-weight:bold;cursor:pointer;margin:6px 3px}
-#dashboard{display:none}
-#message{color:#ff7777;margin-top:10px}
-.small{color:#aaa;font-size:13px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}
-.stat{background:#252525;padding:20px;text-align:center;border-radius:10px}
-.stat strong{display:block;color:gold;font-size:27px}
-.task{background:#252525;padding:18px;border-radius:10px;margin:12px 0}
-footer{text-align:center;padding:25px;color:#aaa}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #080808;
+  color: white;
+}
+
+header {
+  background: #151515;
+  padding: 20px;
+  border-bottom: 2px solid gold;
+  display: flex;
+  justify-content: space-between;
+}
+
+.logo {
+  color: gold;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+.card {
+  background: #171717;
+  border: 1px solid gold;
+  border-radius: 12px;
+  padding: 22px;
+  margin: 20px 0;
+}
+
+h1, h2 {
+  color: gold;
+  margin-bottom: 18px;
+}
+
+p {
+  line-height: 1.6;
+  margin: 5px 0;
+}
+
+input {
+  width: 100%;
+  padding: 14px;
+  margin: 9px 0;
+  background: #222;
+  border: 1px solid gold;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+}
+
+button {
+  background: linear-gradient(45deg, #d99c00, #ffe66d);
+  border: 0;
+  padding: 13px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 8px 3px;
+}
+
+button:disabled {
+  opacity: 0.5;
+}
+
+#dashboard {
+  display: none;
+}
+
+#message {
+  color: #ff7777;
+  margin-top: 12px;
+  overflow-wrap: anywhere;
+}
+
+#success {
+  color: #70ff91;
+  margin-top: 12px;
+  overflow-wrap: anywhere;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
+}
+
+.stat {
+  background: #252525;
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+}
+
+.stat strong {
+  display: block;
+  color: gold;
+  font-size: 27px;
+}
+
+.task {
+  background: #252525;
+  padding: 18px;
+  border-radius: 10px;
+  margin: 12px 0;
+}
+
+.small {
+  color: #aaa;
+  font-size: 13px;
+}
+
+footer {
+  text-align: center;
+  padding: 25px;
+  color: #aaa;
+}
 </style>
 </head>
 
 <body>
 
 <header>
-<div class="logo">👑 ProfitZone</div>
-<div>ONLINE TASKS</div>
+  <div class="logo">👑 ProfitZone</div>
+  <div>ONLINE TASKS</div>
 </header>
 
 <div class="container">
 
-<div id="home">
+  <div id="home">
 
-<div class="card">
-<h1>Welcome to ProfitZone 👑</h1>
-<p>Create your account and access your dashboard.</p>
-</div>
+    <div class="card">
+      <h1>Welcome to ProfitZone 👑</h1>
+      <p>Create your account and access your dashboard.</p>
+    </div>
 
-<div class="card">
-<h2>Create Account</h2>
-<input id="signupName" placeholder="Full Name">
-<input id="signupEmail" type="email" placeholder="Email Address">
-<input id="signupPassword" type="password" placeholder="Create Password">
-<button onclick="signup()">SIGN UP</button>
-</div>
+    <div class="card">
+      <h2>Create Account</h2>
 
-<div class="card">
-<h2>User Login</h2>
-<input id="loginEmail" type="email" placeholder="Email Address">
-<input id="loginPassword" type="password" placeholder="Password">
-<button onclick="login()">LOGIN</button>
-<p id="message"></p>
-</div>
+      <input id="signupName" placeholder="Full Name">
+      <input id="signupEmail" type="email" placeholder="Email Address">
+      <input id="signupPassword" type="password" placeholder="Create Password">
 
-</div>
+      <button id="signupButton" onclick="signup()">SIGN UP</button>
 
-<div id="dashboard">
+      <p id="success"></p>
+    </div>
 
-<div class="card">
-<h1>Welcome, <span id="userName"></span> 👑</h1>
-<p>Your ProfitZone Dashboard</p>
-</div>
+    <div class="card">
+      <h2>User Login</h2>
 
-<div class="stats">
-<div class="stat">
-<strong id="balance">0</strong>
-Demo Points
-</div>
-</div>
+      <input id="loginEmail" type="email" placeholder="Email Address">
+      <input id="loginPassword" type="password" placeholder="Password">
 
-<div class="card">
-<h2>🎯 Available Tasks</h2>
+      <button id="loginButton" onclick="login()">LOGIN</button>
 
-<div class="task">
-<h3>Daily Reward</h3>
-<p>Collect demo points.</p>
-<p class="small">Task rewards will be enabled after secure points setup.</p>
-</div>
+      <p id="message"></p>
+    </div>
 
-<div class="task">
-<h3>Reading Task</h3>
-<p>Complete a reading activity.</p>
-</div>
+  </div>
 
-<div class="task">
-<h3>Copy Task</h3>
-<p>Welcome to ProfitZone Demo!</p>
-</div>
-</div>
+  <div id="dashboard">
 
-<div class="card">
-<h2>Account Information</h2>
-<p id="accountEmail"></p>
-<p id="accountStatus">Status: Active</p>
-<button onclick="logout()">LOGOUT</button>
-</div>
+    <div class="card">
+      <h1>Welcome, <span id="userName"></span> 👑</h1>
+      <p>Your ProfitZone Dashboard</p>
+    </div>
 
-</div>
+    <div class="stats">
+      <div class="stat">
+        <strong id="balance">0</strong>
+        Demo Points
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🎯 Available Tasks</h2>
+
+      <div class="task">
+        <h3>Daily Reward</h3>
+        <p>Collect demo points.</p>
+        <p class="small">Rewards are not enabled yet.</p>
+      </div>
+
+      <div class="task">
+        <h3>Reading Task</h3>
+        <p>Complete a reading activity.</p>
+      </div>
+
+      <div class="task">
+        <h3>Copy Task</h3>
+        <p>Welcome to ProfitZone Demo!</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Account Information</h2>
+      <p id="accountEmail"></p>
+      <p id="accountStatus">Status: Active</p>
+      <button onclick="logout()">LOGOUT</button>
+    </div>
+
+  </div>
+
 </div>
 
 <footer>
-<p>© 2026 ProfitZone</p>
-<p>Demo Platform - No Real Payments</p>
+  <p>© 2026 ProfitZone</p>
+  <p>Demo Platform - No Real Payments</p>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
+// SUPABASE CONNECTION
+
 const SUPABASE_URL = "https://fefrnivoeiaejkrrggqt.supabase.co";
 
 const SUPABASE_KEY = "YOUR_SUPABASE_PUBLISHABLE_KEY";
 
 const db = window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
+  SUPABASE_URL,
+  SUPABASE_KEY
 );
 
-function showMessage(text){
-document.getElementById("message").innerText=text;
+
+// MESSAGE FUNCTIONS
+
+function showMessage(text) {
+  document.getElementById("message").innerText = text;
 }
 
-async function signup(){
+function showSuccess(text) {
+  document.getElementById("success").innerText = text;
+}
 
-const name=document.getElementById("signupName").value.trim();
-const email=document.getElementById
+
+// SIGNUP
+
+async function signup() {
+
+  const name = document.getElementById("signupName").value.trim();
+  const email = document.getElementById("signupEmail").value.trim();
+  const password = document.getElementById("signupPassword").value;
+
+  showMessage("");
+  showSuccess("");
+
+  if (!name || !email || !password) {
+    showSuccess("");
+    showMessage("Please fill all fields.");
+    return;
+  }
+
+  if (password.length < 6) {
+    showMessage("Password must be at least 6 characters.");
+    return;
+  }
+
+  const button = document.getElementById("signupButton");
+  button.disabled = true;
+  button.innerText = "PLEASE WAIT...";
+
+  try {
+
+    const { data, error } = await db.auth.signUp({
+      email: email,
+      password: password,
+      options: {
+        data: {
+          name: name
+        }
+      }
+    });
+
+    if (error) throw error;
+
+    if (data.session) {
+      showSuccess("Account created successfully!");
+      await loadDashboard(data.user);
+    } else {
+      showSuccess("Account created! Please check your email to confirm your account, then login.");
+    }
+
+  } catch (error) {
+    showMessage(error.message);
+  }
+
+  button.disabled = false;
+  button.innerText = "SIGN UP";
+}
+
+
+// LOGIN
+
+async function login() {
+
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value;
+
+  showMessage("");
+  showSuccess("");
+
+  if (!email || !password) {
+    showMessage("Please enter email and password.");
+    return;
+  }
+
+  const button = document.getElementById("loginButton");
+  button.disabled = true;
+  button.innerText = "LOGGING IN...";
+
+  try {
+
+    const { data, error } = await db.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
+
+    if (error) throw error;
+
+    await loadDashboard(data.user);
+
+  } catch (error) {
+    showMessage(error.message);
+  }
+
+  button.disabled = false;
+  button.innerText = "LOGIN";
+}
+
+
+// LOAD DASHBOARD
+
+async function loadDashboard(user) {
+
+  try {
+
+    const { data: profile, error } = await db
+      .from("profiles")
+      .select("name, points, blocked")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (error) throw error;
+
+    if (!profile) {
+      throw new Error("Profile not found. Please contact admin.");
+    }
+
+    if (profile.blocked) {
+      await db.auth.signOut();
+      throw new Error("Your account is blocked.");
+    }
+
+    document.getElementById("userName").innerText =
+      profile.name || user.email;
+
+    document.getElementById("balance").innerText =
+      profile.points ?? 0;
+
+    document.getElementById("accountEmail").innerText =
+      "Email: " + user.email;
+
+    document.getElementById("accountStatus").innerText =
+      "Status: Active";
+
+    document.getElementById("home").style.display = "none";
+    document.getElementById("dashboard").style.display = "block";
+
+  } catch (error) {
+
+    showMessage(error.message);
+
+  }
+}
+
+
+// LOGOUT
+
+async function logout() {
+
+  const { error } = await db.auth.signOut();
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  document.getElementById("dashboard").style.display = "none";
+  document.getElementById("home").style.display = "block";
+
+  document.getElementById("loginPassword").value = "";
+  showMessage("You have logged out.");
+
+}
+
+
+// CHECK EXISTING SESSION
+
+async function checkSession() {
+
+  const { data, error } = await db.auth.getSession();
+
+  if (error) {
+    showMessage(error.message);
+    return;
+  }
+
+  if (data.session) {
+    await loadDashboard(data.session.user);
+  }
+
+}
+
+checkSession();
+
+</script>
+
+</body>
+</html>
