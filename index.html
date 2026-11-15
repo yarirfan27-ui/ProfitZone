@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ProfitZone</title>
 
 <style>
 * {
@@ -155,10 +156,16 @@ footer {
       <h2>Create Account</h2>
 
       <input id="signupName" placeholder="Full Name">
-      <input id="signupEmail" type="email" placeholder="Email Address">
-      <input id="signupPassword" type="password" placeholder="Create Password">
 
-      <button id="signupButton" onclick="signup()">SIGN UP</button>
+      <input id="signupEmail" type="email"
+      placeholder="Email Address">
+
+      <input id="signupPassword" type="password"
+      placeholder="Create Password">
+
+      <button id="signupButton" onclick="signup()">
+        SIGN UP
+      </button>
 
       <p id="success"></p>
     </div>
@@ -166,10 +173,15 @@ footer {
     <div class="card">
       <h2>User Login</h2>
 
-      <input id="loginEmail" type="email" placeholder="Email Address">
-      <input id="loginPassword" type="password" placeholder="Password">
+      <input id="loginEmail" type="email"
+      placeholder="Email Address">
 
-      <button id="loginButton" onclick="login()">LOGIN</button>
+      <input id="loginPassword" type="password"
+      placeholder="Password">
+
+      <button id="loginButton" onclick="login()">
+        LOGIN
+      </button>
 
       <p id="message"></p>
     </div>
@@ -184,10 +196,12 @@ footer {
     </div>
 
     <div class="stats">
+
       <div class="stat">
         <strong id="balance">0</strong>
         Demo Points
       </div>
+
     </div>
 
     <div class="card">
@@ -208,12 +222,16 @@ footer {
         <h3>Copy Task</h3>
         <p>Welcome to ProfitZone Demo!</p>
       </div>
+
     </div>
 
     <div class="card">
       <h2>Account Information</h2>
+
       <p id="accountEmail"></p>
-      <p id="accountStatus">Status: Active</p>
+
+      <p>Status: Active</p>
+
       <button onclick="logout()">LOGOUT</button>
     </div>
 
@@ -230,17 +248,25 @@ footer {
 
 <script>
 
-// SUPABASE CONNECTION
-sb_publishable_g0Luqi8lJNq7gu3u7IrLjw_rpO3AHzV
-const SUPABASE_URL = "https://fefrnivoeiaejkrrg";
-sb_publishable_g0Luqi8lJNq7gu3u7IrLjw_rpO3AHzV
+// =================================
+// SUPABASE DATABASE CONNECTION
+// =================================
+
+const SUPABASE_URL =
+"https://fefrnivoeiaejkrrg.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_g0Luqi8lJNq7gu3u7IrLjw_rpO3AHzV";
+
 const db = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
 );
 
 
+// =================================
 // MESSAGE FUNCTIONS
+// =================================
 
 function showMessage(text) {
   document.getElementById("message").innerText = text;
@@ -251,19 +277,22 @@ function showSuccess(text) {
 }
 
 
+// =================================
 // SIGNUP
+// =================================
 
 async function signup() {
 
   const name = document.getElementById("signupName").value.trim();
+
   const email = document.getElementById("signupEmail").value.trim();
+
   const password = document.getElementById("signupPassword").value;
 
   showMessage("");
   showSuccess("");
 
   if (!name || !email || !password) {
-    showSuccess("");
     showMessage("Please fill all fields.");
     return;
   }
@@ -274,44 +303,62 @@ async function signup() {
   }
 
   const button = document.getElementById("signupButton");
+
   button.disabled = true;
   button.innerText = "PLEASE WAIT...";
 
   try {
 
     const { data, error } = await db.auth.signUp({
+
       email: email,
+
       password: password,
+
       options: {
         data: {
           name: name
         }
       }
+
     });
 
     if (error) throw error;
 
     if (data.session) {
+
       showSuccess("Account created successfully!");
+
       await loadDashboard(data.user);
+
     } else {
-      showSuccess("Account created! Please check your email to confirm your account, then login.");
+
+      showSuccess(
+        "Account created! Please verify your email, then login."
+      );
+
     }
 
   } catch (error) {
+
     showMessage(error.message);
+
   }
 
   button.disabled = false;
   button.innerText = "SIGN UP";
+
 }
 
 
+// =================================
 // LOGIN
+// =================================
 
 async function login() {
 
   const email = document.getElementById("loginEmail").value.trim();
+
   const password = document.getElementById("loginPassword").value;
 
   showMessage("");
@@ -323,14 +370,18 @@ async function login() {
   }
 
   const button = document.getElementById("loginButton");
+
   button.disabled = true;
   button.innerText = "LOGGING IN...";
 
   try {
 
     const { data, error } = await db.auth.signInWithPassword({
+
       email: email,
+
       password: password
+
     });
 
     if (error) throw error;
@@ -338,61 +389,45 @@ async function login() {
     await loadDashboard(data.user);
 
   } catch (error) {
+
     showMessage(error.message);
+
   }
 
   button.disabled = false;
   button.innerText = "LOGIN";
+
 }
 
 
+// =================================
 // LOAD DASHBOARD
+// =================================
 
 async function loadDashboard(user) {
 
-  try {
+  if (!user) return;
 
-    const { data: profile, error } = await db
-      .from("profiles")
-      .select("name, points, blocked")
-      .eq("id", user.id)
-      .maybeSingle();
+  const name =
+    user.user_metadata?.name || user.email;
 
-    if (error) throw error;
+  document.getElementById("userName").innerText = name;
 
-    if (!profile) {
-      throw new Error("Profile not found. Please contact admin.");
-    }
+  document.getElementById("balance").innerText = "0";
 
-    if (profile.blocked) {
-      await db.auth.signOut();
-      throw new Error("Your account is blocked.");
-    }
+  document.getElementById("accountEmail").innerText =
+    "Email: " + user.email;
 
-    document.getElementById("userName").innerText =
-      profile.name || user.email;
+  document.getElementById("home").style.display = "none";
 
-    document.getElementById("balance").innerText =
-      profile.points ?? 0;
+  document.getElementById("dashboard").style.display = "block";
 
-    document.getElementById("accountEmail").innerText =
-      "Email: " + user.email;
-
-    document.getElementById("accountStatus").innerText =
-      "Status: Active";
-
-    document.getElementById("home").style.display = "none";
-    document.getElementById("dashboard").style.display = "block";
-
-  } catch (error) {
-
-    showMessage(error.message);
-
-  }
 }
 
 
+// =================================
 // LOGOUT
+// =================================
 
 async function logout() {
 
@@ -404,27 +439,36 @@ async function logout() {
   }
 
   document.getElementById("dashboard").style.display = "none";
+
   document.getElementById("home").style.display = "block";
 
   document.getElementById("loginPassword").value = "";
+
   showMessage("You have logged out.");
 
 }
 
 
+// =================================
 // CHECK EXISTING SESSION
+// =================================
 
 async function checkSession() {
 
-  const { data, error } = await db.auth.getSession();
+  try {
 
-  if (error) {
+    const { data, error } = await db.auth.getSession();
+
+    if (error) throw error;
+
+    if (data.session) {
+      await loadDashboard(data.session.user);
+    }
+
+  } catch (error) {
+
     showMessage(error.message);
-    return;
-  }
 
-  if (data.session) {
-    await loadDashboard(data.session.user);
   }
 
 }
